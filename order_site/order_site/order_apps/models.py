@@ -36,3 +36,36 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name
+
+
+class Profile(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
+    address = models.CharField(max_length=300)
+    code_postie = models.CharField(max_length=8)
+
+
+class Meson(models.Model):
+    name = models.CharField(max_length=100)
+    city = models.CharField(max_length=200)
+    address = models.CharField(max_length=300)
+    email = models.EmailField(unique=True, max_length=50)
+    event_start = models.DateTimeField()
+    event_end = models.DateTimeField()
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    size = models.CharField(max_length=10, choices=[('L', 'L'), ('M', 'M'), ('X', 'X'), ('XL', 'XL'), ('XXL', 'XXL'), ('NO SIZE', 'NO SIZE')])
+    color = models.CharField(max_length=10, choices=[('Red', 'Red'), ('Blue', 'Blue'), ('White', 'White'), ('Black', 'Black'), ('Brown', 'Brown'), ('colorful', 'colorful')])
+    number = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=0)
+    meson = models.ForeignKey('Meson', on_delete=models.CASCADE, related_name='products')
+    categories = models.ForeignKey('Category', on_delete=models.CASCADE)
+
