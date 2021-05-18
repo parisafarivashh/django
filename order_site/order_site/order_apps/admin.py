@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Product, Profile, Category, CustomUser, Meson
 
-# Register your models here.
+admin.site.register(Profile)
+admin.site.register(Product)
+admin.site.register(Category)
+admin.site.register(CustomUser)
+admin.site.register(Meson)
