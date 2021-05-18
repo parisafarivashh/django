@@ -1,8 +1,24 @@
 from django.shortcuts import render
+from requests import Response
+
 from .models import Product, Profile, CustomUser, Meson, Category
 from .serializers import CustomUserSerializer, ProductSerializer, ProfileSerializer, MesonSerializer, CategorySerializer
 from rest_framework import viewsets
 from rest_framework.viewsets import generics
+from rest_framework.authtoken.views import ObtainAuthToken
+
+
+class Login(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        return Response({
+            'user': user.pk,
+            'email_user': user.email,
+            'phone_user': user.phone
+        })
 
 
 class SignUp(viewsets.ModelViewSet):
