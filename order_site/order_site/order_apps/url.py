@@ -12,5 +12,5 @@ router.register('signup', SignUp)
 urlpatterns = [
     path('root/', include(router.urls)),
     path('', Login.as_view()),
-    path('profile/<int:pk>', ProfileView.as_view())
+    path('profile/', ProfileView.as_view())
 ]

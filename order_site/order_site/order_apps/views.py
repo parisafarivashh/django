@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 
 from .models import Product, Profile, CustomUser, Meson, Category
 from .serializers import CustomUserSerializer, ProductSerializer, ProfileSerializer, MesonSerializer, CategorySerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from .permissions import IsAdmin, IsOwn
@@ -37,13 +37,23 @@ class MesonViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated, IsAdmin,]
+    permission_classes = (IsAdmin,)
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
+    permission_classes = (IsOwn,)
     serializer_class = ProfileSerializer
-    permission_classes = [IsOwn,]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Profile.objects.filter(user=user)
+        return queryset
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class ProductViewSet(viewsets.ModelViewSet):
