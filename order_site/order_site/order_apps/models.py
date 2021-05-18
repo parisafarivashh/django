@@ -97,6 +97,10 @@ class ItemOrder(models.Model):
 
     objects = ItemOrderManager()
 
+    @property
+    def cost(self):
+        return self.count * self.price
+
     def __str__(self):
         return self.product
 

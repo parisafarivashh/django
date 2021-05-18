@@ -64,6 +64,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class ItemOrderSerializer(serializers.ModelSerializer):
+    cost = serializers.ReadOnlyField()
+
     class Meta:
         model = ItemOrder
-        fields = ['order', 'product', 'count']
+        fields = ['order', 'product', 'price', 'count', 'cost']
+        extra_kwargs = {'price': {'read_only': True}}
+
+    def to_representation(self, instance):
+        data = super(ItemOrderSerializer, self).to_representation(instance)
+        data['product'] = ProductSerializer(instance=instance.product).data
+        data['order'] = OrderSerializer(instance=instance.order).data
+
+        return data
+
