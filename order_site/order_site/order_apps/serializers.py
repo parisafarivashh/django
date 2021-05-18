@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Product, CustomUser, Meson, Category
+from .models import Profile, Product, CustomUser, Meson, Category, Order, ItemOrder
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -17,6 +17,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         user.save()
         profile = Profile.objects.create(user=user)
         profile.save()
+        order = Order.objects.create(user=user)
+        order.save()
         return user
 
 
@@ -53,3 +55,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
 
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['user']
+
+
+class ItemOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemOrder
+        fields = ['order', 'product', 'price', 'count']
