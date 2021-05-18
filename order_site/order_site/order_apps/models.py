@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
@@ -49,7 +51,7 @@ class Meson(models.Model):
     city = models.CharField(max_length=200)
     address = models.CharField(max_length=300)
     email = models.EmailField(unique=True, max_length=50)
-    event_start = models.DateTimeField()
+    event_start = models.DateTimeField(default=datetime.now)
     event_end = models.DateTimeField()
 
 
