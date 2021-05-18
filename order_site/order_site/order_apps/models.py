@@ -71,3 +71,14 @@ class Product(models.Model):
     meson = models.ForeignKey('Meson', on_delete=models.CASCADE, related_name='products')
     categories = models.ForeignKey('Category', on_delete=models.CASCADE)
 
+
+class Order(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+
+
+class ItemOrder(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    order = models.ForeignKey('order', on_delete=models.CASCADE)
+    price = models.FloatField()
+    count = models.IntegerField()
+
