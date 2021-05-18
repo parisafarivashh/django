@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 
-from .models import Product, Profile, CustomUser, Meson, Category
-from .serializers import CustomUserSerializer, ProductSerializer, ProfileSerializer, MesonSerializer, CategorySerializer
+from .models import Product, Profile, CustomUser, Meson, Category, Order
+from .serializers import CustomUserSerializer, ProductSerializer,\
+    ProfileSerializer, MesonSerializer, CategorySerializer, OrderSerializer, ItemOrder
 from rest_framework import viewsets, mixins
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -66,3 +67,19 @@ class ProductViewSet(viewsets.ModelViewSet):
         else:
             self.permission_classes = [ActionPermission,]
         return super().get_permissions()
+
+
+class OrderViewList(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = (IsOwn,)
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Order.objects.filter(user=user)
+        return queryset
+
+    def get_objects(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset)
+        self.check_object_permissions(self.request, obj)
+        return obj
