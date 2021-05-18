@@ -6,8 +6,8 @@ from .serializers import CustomUserSerializer, ProductSerializer, ProfileSeriali
 from rest_framework import viewsets, mixins
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
-from .permissions import IsAdmin, IsOwn
-from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAdmin, IsOwn, ActionPermission
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class Login(ObtainAuthToken):
@@ -60,3 +60,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def get_permissions(self):
+        if self.action == 'list':
+            self.permission_classes = [AllowAny,]
+        else:
+            self.permission_classes = [ActionPermission,]
+        return super().get_permissions()
