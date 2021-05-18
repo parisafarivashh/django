@@ -1,16 +1,17 @@
 from django.shortcuts import render
-from requests import Response
+from rest_framework.response import Response
 
 from .models import Product, Profile, CustomUser, Meson, Category
 from .serializers import CustomUserSerializer, ProductSerializer, ProfileSerializer, MesonSerializer, CategorySerializer
 from rest_framework import viewsets
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
+from .permissions import IsAdmin, IsOwn
 
 
 class Login(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(request.data,
+        serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -29,16 +30,19 @@ class SignUp(viewsets.ModelViewSet):
 class MesonViewSet(viewsets.ModelViewSet):
     queryset = Meson.objects.all()
     serializer_class = MesonSerializer
+    permission_classes = (IsAdmin,)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (IsAdmin,)
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = (IsOwn,)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
