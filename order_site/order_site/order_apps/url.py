@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import ProfileView, ProductViewSet, CategoryViewSet, MesonViewSet, SignUp, Login
+from .views import ProfileView, ProductViewSet, CategoryViewSet\
+    , MesonViewSet, SignUp, Login, OrderViewList
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -12,5 +13,6 @@ router.register('signup', SignUp)
 urlpatterns = [
     path('root/', include(router.urls)),
     path('', Login.as_view()),
-    path('profile/', ProfileView.as_view())
+    path('profile/', ProfileView.as_view()),
+    path('order_list/', OrderViewList.as_view())
 ]
