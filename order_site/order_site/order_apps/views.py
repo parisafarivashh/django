@@ -85,8 +85,10 @@ class OrderViewList(generics.RetrieveUpdateDestroyAPIView):
         return obj
 
 
-class ItemOrderViewSet(viewsets.ModelViewSet):
+class ItemOrderViewSet(mixins.CreateModelMixin,
+                       mixins.UpdateModelMixin,
+                       viewsets.GenericViewSet):
+
     queryset = ItemOrder.objects.all()
     serializer_class = ItemOrderSerializer
-    permission_classes = (IsOwn,)
 

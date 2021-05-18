@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
@@ -76,9 +76,27 @@ class Order(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
 
 
+class ItemOrderManager(models.Manager):
+    def create(self, **kwargs):
+        print("kwargs", kwargs)
+        product = kwargs.get('product', None)
+        order = kwargs.get('order', None)
+        count = kwargs.get('count', None)
+
+        price = product.price
+        with transaction.atomic():
+            instance = super().create(price=price, product=product, order=order, count=count)
+            return instance
+
+
 class ItemOrder(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     order = models.ForeignKey('order', on_delete=models.CASCADE)
     price = models.FloatField()
     count = models.IntegerField()
+
+    objects = ItemOrderManager()
+
+    def __str__(self):
+        return self.product
 
