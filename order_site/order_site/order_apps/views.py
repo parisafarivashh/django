@@ -42,7 +42,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsOwn,)
+    permission_classes = (IsOwn, )
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
@@ -70,15 +70,15 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class OrderViewList(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated, IsOwn)
     serializer_class = OrderSerializer
-    permission_classes = (IsOwn,)
 
     def get_queryset(self):
         user = self.request.user
         queryset = Order.objects.filter(user=user)
         return queryset
 
-    def get_objects(self):
+    def get_object(self):
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset)
         self.check_object_permissions(self.request, obj)
