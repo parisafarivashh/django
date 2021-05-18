@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from .permissions import IsAdmin, IsOwn
+from rest_framework.permissions import IsAuthenticated
 
 
 class Login(ObtainAuthToken):
@@ -30,19 +31,19 @@ class SignUp(viewsets.ModelViewSet):
 class MesonViewSet(viewsets.ModelViewSet):
     queryset = Meson.objects.all()
     serializer_class = MesonSerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = [IsAdmin,]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = [IsAuthenticated, IsAdmin,]
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = (IsOwn,)
+    permission_classes = [IsOwn,]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
