@@ -111,3 +111,7 @@ class ItemOrder(models.Model):
     def __str__(self):
         return self.product
 
+    def delete(self, using=None, keep_parents=False, *args, **kwargs):
+        super(ItemOrder, self).delete(*args, **kwargs)
+        self.product.number += self.count
+        self.product.save()
