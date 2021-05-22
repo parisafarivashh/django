@@ -86,7 +86,14 @@ class ItemOrderManager(models.Manager):
         price = product.price
         with transaction.atomic():
             instance = super().create(price=price, product=product, order=order, count=count)
-            return instance
+            if product:
+                print(product.number)
+                product.number = product.number - count
+                if product.number < 0:
+                    raise ValueError('order number not available')
+                product.save()
+                print(product.number)
+                return instance
 
 
 class ItemOrder(models.Model):
