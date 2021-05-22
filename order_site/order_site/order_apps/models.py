@@ -39,6 +39,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.name
 
+    @property
+    def id_order(self):
+        id_order = self.orders.last()
+        return id_order
+
 
 class Profile(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
@@ -73,7 +78,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='orders')
 
 
 class ItemOrderManager(models.Manager):

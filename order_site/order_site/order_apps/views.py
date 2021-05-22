@@ -94,4 +94,5 @@ class ItemOrderViewSet(mixins.CreateModelMixin,
     queryset = ItemOrder.objects.all()
     serializer_class = ItemOrderSerializer
 
-
+    def perform_create(self, serializer):
+        serializer.save(order=self.request.user.id_order)

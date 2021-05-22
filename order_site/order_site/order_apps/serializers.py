@@ -72,7 +72,7 @@ class ItemOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ItemOrder
-        fields = ['order', 'product', 'price', 'count', 'cost']
+        fields = ['product', 'price', 'count', 'cost']
         extra_kwargs = {'price': {'read_only': True}}
 
     def to_representation(self, instance):
@@ -81,4 +81,9 @@ class ItemOrderSerializer(serializers.ModelSerializer):
         data['order'] = OrderSerializer(instance=instance.order).data
 
         return data
+
+    def create(self, validated_data):
+        obj = ItemOrder.objects.create(**validated_data)
+        return obj
+
 
