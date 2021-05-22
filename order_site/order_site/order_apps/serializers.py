@@ -81,10 +81,11 @@ class ItemOrderSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
+    cost = serializers.ReadOnlyField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ['user', 'items']
+        fields = ['user', 'items', 'cost']
         extra_kwargs = {'items': {'read_only':True}}
 
     # def to_representation(self, instance):

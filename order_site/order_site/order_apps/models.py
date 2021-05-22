@@ -76,9 +76,19 @@ class Product(models.Model):
     meson = models.ForeignKey('Meson', on_delete=models.CASCADE, related_name='products')
     categories = models.ForeignKey('Category', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='orders')
+
+    @property
+    def cost(self):
+        cost = 0
+        for item in self.items.all():
+            cost += item.cost
+        return cost
 
 
 class ItemOrderManager(models.Manager):
