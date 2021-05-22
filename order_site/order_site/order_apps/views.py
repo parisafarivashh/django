@@ -42,7 +42,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsOwn, )
+    permission_classes = (IsAuthenticated, IsOwn)
     serializer_class = ProfileSerializer
 
     def get_queryset(self):

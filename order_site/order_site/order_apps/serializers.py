@@ -35,6 +35,10 @@ class MesonSerializer(serializers.ModelSerializer):
         model = Meson
         fields = ['name', 'city', 'address', 'email', 'event_start', 'event_end']
 
+    def validate(self, data):
+        if data['event_start'] > data['event_end']:
+            raise serializers.ValidationError("finish must occur after start")
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
