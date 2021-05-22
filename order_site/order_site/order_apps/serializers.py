@@ -59,14 +59,6 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
-
-    class Meta:
-        model = Order
-        fields = ['user']
-
-
 class ItemOrderSerializer(serializers.ModelSerializer):
     cost = serializers.ReadOnlyField()
 
@@ -85,5 +77,20 @@ class ItemOrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         obj = ItemOrder.objects.create(**validated_data)
         return obj
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['user', 'items']
+        extra_kwargs = {'items': {'read_only':True}}
+
+    def to_representation(self, instance):
+        data = super(OrderSerializer, self).to_representation()
+        print(data)
+        return data
+
 
 

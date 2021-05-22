@@ -103,7 +103,7 @@ class ItemOrderManager(models.Manager):
 
 class ItemOrder(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    order = models.ForeignKey('order', on_delete=models.CASCADE)
+    order = models.ForeignKey('order', on_delete=models.CASCADE, related_name='items')
     price = models.FloatField()
     count = models.IntegerField()
 
