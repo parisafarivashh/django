@@ -87,6 +87,7 @@ class OrderViewList(generics.RetrieveUpdateDestroyAPIView):
 
 class ItemOrderViewSet(mixins.CreateModelMixin,
                        mixins.UpdateModelMixin,
+                       mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
 
     queryset = ItemOrder.objects.all()
