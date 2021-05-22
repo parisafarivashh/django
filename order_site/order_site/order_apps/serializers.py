@@ -87,10 +87,19 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['user', 'items']
         extra_kwargs = {'items': {'read_only':True}}
 
-    def to_representation(self, instance):
-        data = super(OrderSerializer, self).to_representation()
-        print(data)
-        return data
+    # def to_representation(self, instance):
+    #     data = super(OrderSerializer, self).to_representation(instance)
+    #     print(data['items'])
+    #     list_item = []
+    #     for item in data['items']:
+    #         item_order = ItemOrder.objects.filter(pk=item).values()
+    #         print(item_order)
+    #         obj_product = Product.objects.get(pk=item_order[0]['product_id'])
+    #         list_item.append(ProductSerializer(instance=obj_product).data)
+    #         list_item.append(item_order[0]['count'])
+    #
+    #     data['items'] = list_item
+    #     return data
 
 
 
