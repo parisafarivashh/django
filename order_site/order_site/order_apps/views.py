@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -19,16 +20,23 @@ class Login(ObtainAuthToken):
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        token, create = Token.objects.get_or_create(user=user)
         return Response({
             'user': user.pk,
             'email_user': user.email,
-            'phone_user': user.phone
+            'phone_user': user.phone,
+            'token': token.key
         })
 
 
 class SignUp(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
+    # queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = CustomUser.objects.filter(phone=user.phone)
+        return queryset
 
 
 class MesonViewSet(viewsets.ModelViewSet):

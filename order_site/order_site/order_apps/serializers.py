@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+
 from .models import Profile, Product, CustomUser, Meson, Category, Order, ItemOrder
 
 
@@ -19,6 +21,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         profile.save()
         order = Order.objects.create(user=user)
         order.save()
+        token = Token.objects.create(user=user)
+        token.save()
         return user
 
 

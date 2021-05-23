@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django_filters',
-   'rest_framework.authtoken',
+    'rest_framework.authtoken',
     'order_apps.apps.OrderAppsConfig',
     'rest_framework',
     'django.contrib.admin',
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication'],
+        'rest_framework.authentication.TokenAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]

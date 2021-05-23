@@ -7,14 +7,14 @@ router = DefaultRouter()
 router.register('product', ProductViewSet)
 router.register('category', CategoryViewSet)
 router.register('meson', MesonViewSet)
-router.register('signup', SignUp)
+router.register('signup', SignUp, basename='signup')
 router.register('item_order', ItemOrderViewSet)
 router.register('order', OrderViewList, basename='order')
 
 
 urlpatterns = [
-    path('root/', include(router.urls)),
-    path('', Login.as_view()),
+    path('', include(router.urls)),
+    path('login', Login.as_view()),
     path('profile/', ProfileView.as_view()),
     # path('order_list/', OrderViewList.as_view())
 ]
