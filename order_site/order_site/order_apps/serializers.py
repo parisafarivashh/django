@@ -85,8 +85,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['user', 'items', 'cost']
-        extra_kwargs = {'items': {'read_only':True}}
+        fields = ['user', 'items', 'cost', 'paid']
+        extra_kwargs = {'items': {'read_only': True}}
 
     # def to_representation(self, instance):
     #     data = super(OrderSerializer, self).to_representation(instance)
