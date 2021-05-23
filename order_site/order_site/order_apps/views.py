@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import Product, Profile, CustomUser, Meson, Category, Order, ItemOrder
 from .serializers import CustomUserSerializer, ProductSerializer,\
     ProfileSerializer, MesonSerializer, CategorySerializer, OrderSerializer, ItemOrderSerializer
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, filters
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from .permissions import IsAdmin, IsOwn, ActionPermission
@@ -62,6 +62,8 @@ class ProfileView(generics.RetrieveUpdateDestroyAPIView):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^name', '^meson__name']
 
     def get_permissions(self):
         if self.action == 'list':
