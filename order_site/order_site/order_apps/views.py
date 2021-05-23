@@ -41,6 +41,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAdmin,)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^name']
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
