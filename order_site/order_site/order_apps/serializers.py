@@ -21,8 +21,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         profile.save()
         order = Order.objects.create(user=user)
         order.save()
-        token = Token.objects.create(user=user)
-        token.save()
         return user
 
 

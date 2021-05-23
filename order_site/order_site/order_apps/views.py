@@ -29,14 +29,10 @@ class Login(ObtainAuthToken):
         })
 
 
-class SignUp(viewsets.ModelViewSet):
-    # queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+class SignUp(generics.CreateAPIView):
 
-    def get_queryset(self):
-        user = self.request.user
-        queryset = CustomUser.objects.filter(phone=user.phone)
-        return queryset
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 
 class MesonViewSet(viewsets.ModelViewSet):
