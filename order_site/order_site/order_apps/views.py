@@ -79,16 +79,14 @@ class OrderViewList(mixins.ListModelMixin,
 
     permission_classes = (IsAuthenticated, IsOwn)
     serializer_class = OrderSerializer
-    # queryset = Order.objects.all()
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Order.objects.filter(user=user)
+        queryset = Order.objects.filter(user=user).filter(paid='True')
         return queryset
 
     @action(detail=True, url_path='paid', methods=['get'])
     def paid(self, request, *args, **kwargs):
-        print(kwargs)
         order_id = kwargs['pk']
         with transaction.atomic():
             order = Order.objects.get(id=order_id)
@@ -101,6 +99,13 @@ class OrderViewList(mixins.ListModelMixin,
                 order.delete()
 
             return Response(status=status.HTTP_201_CREATED)
+
+    @action(detail=False, url_path='basket', methods=['get'])
+    def basket(self, request, *args, **kwargs):
+        user = self.request.user
+        basket = Order.objects.filter(paid=False).filter(user=user)
+        serializer = self.get_serializer(basket, many=True)
+        return Response(serializer.data)
 
 
 class ItemOrderViewSet(mixins.CreateModelMixin,
