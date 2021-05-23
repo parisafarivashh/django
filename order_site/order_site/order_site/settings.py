@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_filter',
    'rest_framework.authtoken',
     'order_apps.apps.OrderAppsConfig',
     'rest_framework',

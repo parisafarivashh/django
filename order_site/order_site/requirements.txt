@@ -1,5 +1,7 @@
 asgiref==3.3.4
 Django==3.2.3
+django-filter==2.4.0
+django-phone-field==1.8.1
 django-phonenumber-field==5.1.0
 djangorestframework==3.12.4
 phonenumberslite==8.12.23
