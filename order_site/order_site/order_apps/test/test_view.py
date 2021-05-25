@@ -15,19 +15,13 @@ class ViewTest(TestCase):
                                                         phone="09126939588", password="user123")
         # self.user = CustomUser.objects.get(phone=self.user.phone)
         profile = Profile.objects.create(user=self.user)
-        profile.save()
         order = Order.objects.create(user=self.user, paid=False)
-        order.save()
         # print(Order.objects.get(user=self.user))
-        meson = Meson.objects.create(name="asal", city="shiraz", address="shiraz street khayam ", email="asal@email.com")
-        meson.save()
-        category = Category.objects.create(name='cloths')
-        category.save()
-        product = Product.objects.create(name="pants", size="L", color="Blue",
-                                         number=58, price=300, meson=meson, categories=category)
-        product.save()
-        item_order = ItemOrder.objects.create(product=product, order=order, count=2)
-        item_order.save()
+        self.meson = Meson.objects.create(name="asal", city="shiraz", address="shiraz street khayam ", email="asal@email.com")
+        self.category = Category.objects.create(name='cloths')
+        self.product = Product.objects.create(name="pants", size="L", color="Blue",
+                                         number=58, price=300, meson=self.meson, categories=self.category)
+        item_order = ItemOrder.objects.create(product=self.product, order=order, count=2)
 
     # def test_view_login(self):
     #     c = Client()
@@ -47,10 +41,10 @@ class ViewTest(TestCase):
         force_authenticate(request, user=self.user)
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data[0]['name'], self.product.name)
 
     # def test_create_product(self):
-    #     request = self.factory.post('/root/product/', {"name": "pants", "size": "L", "color": "Blue", "number": 58, "price": 300, "meson": 1, "categories": 1})
-    #     print(request)
+    #     request = self.factory.post('/root/product/', {"name": "pants", "size": "L", "color": "Blue", "number": 58, "price": 300, "meson": self.meson, "categories": self.category})
     #     force_authenticate(request, user=self.user)
     #     response = ProductViewSet.as_view({'post': 'create'})(request)
     #     self.assertEqual(response.status_code, 201)
@@ -70,11 +64,11 @@ class ViewTest(TestCase):
         self.assertTrue(response.data, "{'user': OrderedDict([('name', 'user'), ('email', 'user@email.com'), ('phone', '09126939588')]), 'code_postie': '', 'address': ''}")
 
     def test_list_order(self):
-        request = self.factory.get('root/order/basket/')
-        force_authenticate(request, user=self.user)
+        request = self.factory.get('/root/order/basket/')
+        force_authenticate(request, user=self.user, token=self.user.auth_token)
         response = OrderViewList.as_view({'get': 'list'})(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
+        # print(response.data)
 
     # def test_create_meson(self):
     #     form_data ={'name': 'barana', 'city': 'qom', 'address': 'qom street kamyab',
