@@ -66,8 +66,8 @@ class Meson(models.Model):
     city = models.CharField(max_length=200)
     address = models.CharField(max_length=300)
     email = models.EmailField(unique=True, max_length=50)
-    event_start = models.DateTimeField(default=datetime.now)
-    event_end = models.DateTimeField()
+    event_start = models.DateTimeField(blank=True, null=True, default=datetime.now)
+    event_end = models.DateTimeField(blank=True, null=True)
 
 
 class Category(models.Model):
@@ -105,7 +105,7 @@ class Order(models.Model):
 
 class ItemOrderManager(models.Manager):
     def create(self, **kwargs):
-        print("kwargs", kwargs)
+        # print("kwargs", kwargs)
         product = kwargs.get('product', None)
         order = kwargs.get('order', None)
         count = kwargs.get('count', None)
@@ -114,12 +114,12 @@ class ItemOrderManager(models.Manager):
         with transaction.atomic():
             instance = super().create(price=price, product=product, order=order, count=count)
             if product:
-                print(product.number)
+                # print(product.number)
                 product.number = product.number - count
                 if product.number < 0:
                     raise ValueError('order number not available')
                 product.save()
-                print(product.number)
+                # print(product.number)
                 return instance
 
 

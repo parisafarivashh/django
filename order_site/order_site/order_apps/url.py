@@ -13,7 +13,7 @@ router.register('order', OrderViewList, basename='order')
 
 
 urlpatterns = [
-    path('root', include(router.urls)),
+    path('root/', include(router.urls)),
     path('', SignUp.as_view()),
     path('login', Login.as_view()),
     path('profile/', ProfileView.as_view()),
