@@ -66,7 +66,7 @@ class Meson(models.Model):
     city = models.CharField(max_length=200)
     address = models.CharField(max_length=300)
     email = models.EmailField(unique=True, max_length=50)
-    event_start = models.DateTimeField(blank=True, null=True, default=datetime.now)
+    event_start = models.DateTimeField(blank=True, null=True)
     event_end = models.DateTimeField(blank=True, null=True)
 
 
