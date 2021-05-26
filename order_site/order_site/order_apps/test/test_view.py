@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 
 from ..models import CustomUser, Product, Profile, Order, ItemOrder,Meson , Category
 from rest_framework.test import APIRequestFactory, force_authenticate
-from ..views import ProductViewSet, CategoryViewSet, ProfileView, OrderViewList, MesonViewSet
+from ..views import ProductViewSet, CategoryViewSet, ProfileView, OrderViewList, MesonViewSet, Login
 
 
 class ViewTest(TestCase):
@@ -13,7 +13,6 @@ class ViewTest(TestCase):
         self.factory = APIRequestFactory()
         self.user = CustomUser.objects.create_superuser(name="user", email="user@email.com",
                                                         phone="09126939588", password="user123")
-        # self.user = CustomUser.objects.get(phone=self.user.phone)
         profile = Profile.objects.create(user=self.user)
         order = Order.objects.create(user=self.user, paid=False)
         # print(Order.objects.get(user=self.user))
@@ -23,11 +22,11 @@ class ViewTest(TestCase):
                                          number=58, price=300, meson=self.meson, categories=self.category)
         item_order = ItemOrder.objects.create(product=self.product, order=order, count=2)
 
-    # def test_view_login(self):
-    #     c = Client()
-    #     response = c.post('login', {"username":"09126939588", "password":"user123"}, follow=True)
-    #     print(response.status_code)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_view_login(self):
+        request = self.factory.post('login/', {"username": "09126939588", "password": "user123"})
+        response = Login.as_view()(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['email_user'] , self.user.email)
 
     def test_signup(self):
         c = Client()
@@ -75,7 +74,7 @@ class ViewTest(TestCase):
     #                 'email': 'barana@email.com', 'event_start': '2021-02-01 00000:00',
     #                 'event_end': '2021-04-03 00:00:00'}
     #
-    #     request = self.factory.post('root/meson/', data=form_data)
+    #     request = self.factory.post('/root/meson/', data=form_data)
     #
     #     force_authenticate(request, user=self.user, token=self.user.auth_token)
     #     response = MesonViewSet.as_view({'post': 'create'})(request)
