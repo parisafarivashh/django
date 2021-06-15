@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import ProfileView, ProductViewSet, CategoryViewSet\
-    , MesonViewSet, SignUp, Login, OrderViewList, ItemOrderViewSet
+    , MesonViewSet, SignUp, Login, OrderViewList, ItemOrderViewSet, ChangePasswordView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -17,5 +17,6 @@ urlpatterns = [
     path('', SignUp.as_view()),
     path('login', Login.as_view()),
     path('profile/', ProfileView.as_view()),
-    # path('order_list/', OrderViewList.as_view())
+    path('change_password/', ChangePasswordView.as_view())
+
 ]
