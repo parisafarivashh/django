@@ -6,12 +6,13 @@ from rest_framework.response import Response
 
 from .models import Product, Profile, CustomUser, Meson, Category, Order, ItemOrder
 from .serializers import CustomUserSerializer, ProductSerializer,\
-    ProfileSerializer, MesonSerializer, CategorySerializer, OrderSerializer, ItemOrderSerializer
+    ProfileSerializer, MesonSerializer, CategorySerializer, OrderSerializer, ItemOrderSerializer, ChangePasswordSerializer    
 from rest_framework import viewsets, mixins, status, filters
 from rest_framework.viewsets import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from .permissions import IsAdmin, IsOwn, ActionPermission
 from rest_framework.permissions import IsAuthenticated, AllowAny
+
 
 
 class Login(ObtainAuthToken):
@@ -27,6 +28,25 @@ class Login(ObtainAuthToken):
             'phone_user': user.phone,
             'token': token.key
         })
+
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = ChangePasswordSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = CustomUser.objects.filter(phone=user.phone)
+        return queryset
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 
 
 class SignUp(generics.CreateAPIView):
